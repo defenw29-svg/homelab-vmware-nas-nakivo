@@ -1,6 +1,6 @@
 # Lab 03 - NAS + NAKIVO - Virtualizacion Anidada con VMware + vSphere + TrueNAS
 
-![Esquema de red VMware Home Lab](vmware_topologia_transparente.png)
+<img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/0ce0f38b-8ac3-473c-969d-0362fb6e485d" />
 
 > **Autor:** Ivan Ajenjo Morales (defenw29-svg) | Helpdesk L1/L2 | ITIL | Junior SecOps
 > **Licencia:** MIT - Ver LICENSE - Mantener autoria obligatoria
