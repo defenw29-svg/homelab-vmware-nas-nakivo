@@ -1,6 +1,6 @@
 # Lab 03 - NAS + NAKIVO - Virtualizacion Anidada con VMware + vSphere + TrueNAS
 
-[Esquema de red VMware Home Lab](the_network_scheme_of_the_vmware_home_lab.webp)
+![Esquema de red VMware Home Lab](the_network_scheme_of_the_vmware_home_lab.webp)
 
 > **Autor:** Ivan Ajenjo Morales (defenw29-svg) | Helpdesk L1/L2 | ITIL | Junior SecOps
 > **Licencia:** MIT - Ver LICENSE - Mantener autoria obligatoria
