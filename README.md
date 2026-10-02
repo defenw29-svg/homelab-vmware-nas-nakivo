@@ -174,14 +174,13 @@ esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 # ==============================================================================
 esxcli network ip interface list
 ```
-
 fix(network): corregir sintaxis esxcli y optimizar almacenamiento con mtu 9000
 
 - Corrige la sintaxis obsoleta de 'ip route ipv4 stat add' reemplazándola por 'gateway set' en los bloques de comandos del anexo CLI.
 - Soluciona el error en la declaración de argumentos para la creación de la interfaz VMkernel vmk1 en el paso 5.
 - Remueve el espacio en blanco invisible del port group "Red_Privada" que provocaba fallos de asociación de red.
-- Añade los comandos avanzados de automatización para desplegar e implementar Jumbo Frames (MTU 9000) de extremo a extremo en vSwitch1 y vmk1.
-- Introduce la sección de verificación profesional utilizando el comando 'vmkping' sin fragmentación (payload de 8972 bytes) para entornos de producción.
+- Agrega los comandos avanzados de automatización para implementar Jumbo Frames (MTU 9000) de extremo a extremo en vSwitch1 y vmk1.
+- Introduce la sección de verificación profesional utilizando el comando 'vmkping' sin fragmentación (carga útil de 8972 bytes) para entornos de producción.
 
 ### ⚠️ Regla de Oro en Producción (Validación de Jumbo Frames)
 
