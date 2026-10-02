@@ -87,31 +87,36 @@ Una vez que el entorno vSphere esta operativo (con la maquina virtual `Lubuntu16
 Para evitar configurar las interfaces de red de forma manual en el entorno visual (DCUI) de cada host, puedes habilitar el servicio **SSH** en tus servidores ESXi, conectarte a ellos y ejecutar los siguientes bloques de comandos para desplegar los switches virtuales, asociar las tarjetas físicas y levantar el direccionamiento estático de forma inmediata.
 
 ### 💻 Bloque de comandos para copiar y pegar en ESXi01:
-### 💻 Bloque de comandos para copiar y pegar en ESXi01:
 
 ```bash
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 2. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
+# 2. OPTIMIZACIÓN: Modificar la MTU a 9000 en el switch virtual
+esxcli network vswitch standard set --mtu=9000 --vswitch-name=vSwitch1
+
+# 3. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
 esxcli network vswitch standard uplink add --uplink-name=vmnic1 --vswitch-name=vSwitch1
 
-# 3. Crear el grupo de puertos (Port Group) para el tráfico de backend
+# 4. Crear el grupo de puertos (Port Group) para el tráfico de backend
 esxcli network vswitch standard portgroup add --portgroup-name="Red_Privada" --vswitch-name=vSwitch1
 
-# 4. Configurar la IP fija en la red pública de producción (VMnet8 / vSwitch0 predeterminado)
+# 5. Configurar la IP fija en la red pública de producción (VMnet8 / vSwitch0 predeterminado)
 esxcli network ip interface ipv4 set --interface-name=vmk0 --ipv4=192.168.101.101 --netmask=255.255.255.0 --type=static
 
-# 5. Crear la nueva interfaz VMkernel (vmk1) asignada al grupo de puertos privado
+# 6. Crear la nueva interfaz VMkernel (vmk1) asignada al grupo de puertos privado
 esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Privada"
 
-# 6. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
+# 7. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.101 --netmask=255.255.255.0 --type=static
 
-# 7. Establecer la puerta de enlace predeterminada (Gateway de producción)
+# 8. OPTIMIZACIÓN: Modificar la MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
+esxcli network ip interface set --mtu=9000 --interface-name=vmk1
+
+# 9. Establecer la puerta de enlace predeterminada (Gateway de producción)
 esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
-# [Verificación] Listar interfaces para confirmar los cambios
+# [Verificación] Listar interfaces para confirmar los cambios y MTU
 esxcli network ip interface list
 ```
 
@@ -121,28 +126,33 @@ esxcli network ip interface list
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 2. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
+# 2. OPTIMIZACIÓN: Modificar la MTU a 9000 en el switch virtual
+esxcli network vswitch standard set --mtu=9000 --vswitch-name=vSwitch1
+
+# 3. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
 esxcli network vswitch standard uplink add --uplink-name=vmnic1 --vswitch-name=vSwitch1
 
-# 3. Crear el grupo de puertos (Port Group) para el tráfico de backend
+# 4. Crear el grupo de puertos (Port Group) para el tráfico de backend
 esxcli network vswitch standard portgroup add --portgroup-name="Red_Privada" --vswitch-name=vSwitch1
 
-# 4. Configurar la IP fija en la red pública de producción (VMnet8 / vSwitch0 predeterminado)
+# 5. Configurar la IP fija en la red pública de producción (VMnet8 / vSwitch0 predeterminado)
 esxcli network ip interface ipv4 set --interface-name=vmk0 --ipv4=192.168.101.102 --netmask=255.255.255.0 --type=static
 
-# 5. Crear la nueva interfaz VMkernel (vmk1) asignada al grupo de puertos privado
+# 6. Crear la nueva interfaz VMkernel (vmk1) asignada al grupo de puertos privado
 esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Privada"
 
-# 6. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
+# 7. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.102 --netmask=255.255.255.0 --type=static
 
-# 7. Establecer la puerta de enlace predeterminada (Gateway de producción)
+# 8. OPTIMIZACIÓN: Modificar la MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
+esxcli network ip interface set --mtu=9000 --interface-name=vmk1
+
+# 9. Establecer la puerta de enlace predeterminada (Gateway de producción)
 esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
-# [Verificación] Listar interfaces para confirmar los cambios
+# [Verificación] Listar interfaces para confirmar los cambios y MTU
 esxcli network ip interface list
 ```
-
 ## 👤 Autoria y Proteccion
 **Ivan Ajenjo Morales - defenw29-svg**
 Este laboratorio es parte de mi portfolio De Helpdesk L1/L2 a Junior SecOps / SysAdmin.
