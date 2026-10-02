@@ -87,6 +87,8 @@ Una vez que el entorno vSphere esta operativo (con la maquina virtual `Lubuntu16
 Para evitar configurar las interfaces de red de forma manual en el entorno visual (DCUI) de cada host, puedes habilitar el servicio **SSH** en tus servidores ESXi, conectarte a ellos y ejecutar los siguientes bloques de comandos para desplegar los switches virtuales, asociar las tarjetas físicas y levantar el direccionamiento estático de forma inmediata.
 
 ### 💻 Bloque de comandos para copiar y pegar en ESXi01:
+### 💻 Bloque de comandos para copiar y pegar en ESXi01:
+
 ```bash
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
@@ -107,13 +109,14 @@ esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Priv
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.101 --netmask=255.255.255.0 --type=static
 
 # 7. Establecer la puerta de enlace predeterminada (Gateway de producción)
-esxcli network ip route ipv4 stat add --gateway=192.168.101.2 --network=default
+esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
 # [Verificación] Listar interfaces para confirmar los cambios
 esxcli network ip interface list
 ```
 
 ### 💻 Bloque de comandos para copiar y pegar en ESXi02:
+
 ```bash
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
@@ -134,13 +137,11 @@ esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Priv
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.102 --netmask=255.255.255.0 --type=static
 
 # 7. Establecer la puerta de enlace predeterminada (Gateway de producción)
-esxcli network ip route ipv4 stat add --gateway=192.168.101.2 --network=default
+esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
 # [Verificación] Listar interfaces para confirmar los cambios
 esxcli network ip interface list
 ```
-
----
 
 ## 👤 Autoria y Proteccion
 **Ivan Ajenjo Morales - defenw29-svg**
