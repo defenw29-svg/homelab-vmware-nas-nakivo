@@ -1,6 +1,6 @@
 # Lab 03 - NAS + NAKIVO - Virtualizacion Anidada con VMware + vSphere + TrueNAS
 
-<img width="1920" height="1280" alt="image" src="https://github.com/user-attachments/assets/6ef3bdc5-6667-44be-841f-17bf1d1b126c" />
+<img width="1920" height="1280" alt="658502182-6ef3bdc5-6667-44be-841f-17bf1d1b126c-crear-imagen-imagen-moderna-la-primera-imagen-con-el" src="https://github.com/user-attachments/assets/26a6309a-ff6e-451b-9801-fd35a37f47e6" />
 
 > **Autor:** Ivan Ajenjo Morales (defenw29-svg) | Helpdesk L1/L2 | ITIL | Junior SecOps
 > **Licencia:** MIT - Ver LICENSE - Mantener autoria obligatoria
