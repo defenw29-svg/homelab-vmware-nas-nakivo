@@ -87,12 +87,23 @@ Una vez que el entorno vSphere esta operativo (con la maquina virtual `Lubuntu16
 Para evitar configurar las interfaces de red de forma manual en el entorno visual (DCUI) de cada host, puedes habilitar el servicio **SSH** en tus servidores ESXi, conectarte a ellos y ejecutar los siguientes bloques de comandos para desplegar los switches virtuales, asociar las tarjetas físicas y levantar el direccionamiento estático de forma inmediata.
 
 ### 💻 Bloque de comandos para copiar y pegar en ESXi01:
+## ⚙️ Automatización Avanzada y Optimización de Red mediante CLI (ESXCLI)
+
+Para maximizar el rendimiento del tráfico de almacenamiento **iSCSI/NFS** y evitar configuraciones manuales propensas a errores, se implementa el uso de **Jumbo Frames (MTU 9000)** de extremo a extremo. Los siguientes bloques unifican el despliegue de la topología de red junto con la optimización de rendimiento corporativo.
+
+---
+
+### 💻 Bloque de comandos para copiar y pegar en ESXi01:
 
 ```bash
+# ==============================================================================
+# LAB_VSCHERE: CONFIGURACIÓN DE RED Y OPTIMIZACIÓN JUMBO FRAMES (ESXi01)
+# ==============================================================================
+
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 2. OPTIMIZACIÓN: Modificar la MTU a 9000 en el switch virtual
+# 2. PRO-OPTIMIZACIÓN: Establecer MTU a 9000 a nivel de Switch Virtual (vSwitch1)
 esxcli network vswitch standard set --mtu=9000 --vswitch-name=vSwitch1
 
 # 3. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
@@ -110,23 +121,31 @@ esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Priv
 # 7. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.101 --netmask=255.255.255.0 --type=static
 
-# 8. OPTIMIZACIÓN: Modificar la MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
+# 8. PRO-OPTIMIZACIÓN: Elevar MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
 esxcli network ip interface set --mtu=9000 --interface-name=vmk1
 
-# 9. Establecer la puerta de enlace predeterminada (Gateway de producción)
+# 9. Configurar de forma normativa la Puerta de Enlace Predeterminada del sistema (Gateway global)
 esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
-# [Verificación] Listar interfaces para confirmar los cambios y MTU
+# ==============================================================================
+# [VERIFICACIÓN PRO] Listar interfaces para confirmar direccionamiento y MTU 9000
+# ==============================================================================
 esxcli network ip interface list
 ```
+
+---
 
 ### 💻 Bloque de comandos para copiar y pegar en ESXi02:
 
 ```bash
+# ==============================================================================
+# LAB_VSCHERE: CONFIGURACIÓN DE RED Y OPTIMIZACIÓN JUMBO FRAMES (ESXi02)
+# ==============================================================================
+
 # 1. Crear el switch virtual dedicado para Almacenamiento y Gestión Privada
 esxcli network vswitch standard add --vswitch-name=vSwitch1
 
-# 2. OPTIMIZACIÓN: Modificar la MTU a 9000 en el switch virtual
+# 2. PRO-OPTIMIZACIÓN: Establecer MTU a 9000 a nivel de Switch Virtual (vSwitch1)
 esxcli network vswitch standard set --mtu=9000 --vswitch-name=vSwitch1
 
 # 3. Asociar la segunda tarjeta de red física (NIC 2 anidada) al nuevo vSwitch
@@ -144,15 +163,30 @@ esxcli network ip interface add --interface-name=vmk1 --portgroup-name="Red_Priv
 # 7. Asignar la IP fija en el segmento privado para almacenamiento (VMnet1)
 esxcli network ip interface ipv4 set --interface-name=vmk1 --ipv4=192.168.105.102 --netmask=255.255.255.0 --type=static
 
-# 8. OPTIMIZACIÓN: Modificar la MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
+# 8. PRO-OPTIMIZACIÓN: Elevar MTU a 9000 en la interfaz VMkernel de almacenamiento (vmk1)
 esxcli network ip interface set --mtu=9000 --interface-name=vmk1
 
-# 9. Establecer la puerta de enlace predeterminada (Gateway de producción)
+# 9. Configurar de forma normativa la Puerta de Enlace Predeterminada del sistema (Gateway global)
 esxcli network ip route ipv4 gateway set --gateway=192.168.101.2
 
-# [Verificación] Listar interfaces para confirmar los cambios y MTU
+# ==============================================================================
+# [VERIFICACIÓN PRO] Listar interfaces para confirmar direccionamiento y MTU 9000
+# ==============================================================================
 esxcli network ip interface list
 ```
+
+---
+
+### ⚠️ Regla de Oro en Producción (Validación de Jumbo Frames)
+
+Para garantizar que la infraestructura no descarte paquetes ni cause degradación severa (fragmentación), ejecuta el siguiente comando desde la consola SSH de cualquiera de tus hosts ESXi para **comprobar la conectividad limpia con TrueNAS sin fragmentar paquetes**:
+
+```bash
+# Validar conectividad de 9000 bytes hacia el almacenamiento de TrueNAS desde vmk1
+vmkping -I vmk1 -s 8972 -d 192.168.105.105
+```
+*(Nota: El tamaño de payload 8972 es el máximo permitido para probar MTU 9000 restando las cabeceras ICMP/IP sin fragmentación).*
+
 ## 👤 Autoria y Proteccion
 **Ivan Ajenjo Morales - defenw29-svg**
 Este laboratorio es parte de mi portfolio De Helpdesk L1/L2 a Junior SecOps / SysAdmin.
