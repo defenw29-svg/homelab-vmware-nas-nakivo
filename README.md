@@ -50,12 +50,15 @@ Se replicaran dos instancias identicas para habilitar la alta disponibilidad.
 ### Asignacion de Direccionamiento IP:
 
 | Servidor | Interfaz de Red Virtual (VMkernel) | Direccion IP Asignada |
-| :--- | :--- | :--- |
-| **ESXi01** | `vmk0` (Red WAN/NAT en vSwitch0) | `192.168.101.101` |
-| **ESXi01** | `vmk1` (Red Privada en vSwitch1) | `192.168.105.101` |
-| **ESXi02** | `vmk0` (Red WAN/NAT en vSwitch0) | `192.168.101.102` |
-| **ESXi02** | `vmk1` (Red Privada en vSwitch1) | `192.168.105.102` |
 
+### Asignación de Direccionamiento IP:
+
+| Servidor | Interfaz VMkernel | Red Virtual | Dirección IP |
+|:---:|:---:|:---:| :---: |
+| **ESXi01** | `vmk0` | `vSwitch0` / VMnet8 (Producción / Acceso) | `192.168.101.101` |
+| **ESXi01** | `vmk1` | `vSwitch1` / VMnet1 (Gestión / Almacenamiento) | `192.168.105.101` |
+| **ESXi02** | `vmk0` | `vSwitch0` / VMnet8 (Producción / Acceso) | `192.168.101.102` |
+| **ESXi02** | `vmk1` | `vSwitch1` / VMnet1 (Gestión / Almacenamiento) | `192.168.105.102` |
 ---
 
 ## 👑 Fase 4: Control Centralizado (vCenter Server - VCSA)
