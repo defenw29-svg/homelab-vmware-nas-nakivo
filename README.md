@@ -47,19 +47,16 @@ Se replicaran dos instancias identicas para habilitar la alta disponibilidad.
     *   **NIC 1:** Conectado a **VMnet8** (Produccion/Acceso).
     *   **NIC 2:** Conectado a **VMnet1** (Gestion/Almacenamiento).
 
-### Asignacion de Direccionamiento IP:
-
-| Servidor | Interfaz de Red Virtual (VMkernel) | Direccion IP Asignada |
-
 ### Asignación de Direccionamiento IP:
 
-| Servidor | Interfaz VMkernel | Red Virtual | Dirección IP |
-|:---:|:---:|:---:| :---: |
-| **ESXi01** | `vmk0` | `vSwitch0` / VMnet8 (Producción / Acceso) | `192.168.101.101` |
-| **ESXi01** | `vmk1` | `vSwitch1` / VMnet1 (Gestión / Almacenamiento) | `192.168.105.101` |
-| **ESXi02** | `vmk0` | `vSwitch0` / VMnet8 (Producción / Acceso) | `192.168.101.102` |
-| **ESXi02** | `vmk1` | `vSwitch1` / VMnet1 (Gestión / Almacenamiento) | `192.168.105.102` |
----
+| Servidor | Interfaz | Red Virtual | Dirección IP Asignada |
+|:--------:|:--------:|---|:---------------------:|
+| **ESXi01** | `vmk0` | `vSwitch0` → **VMnet8** (Producción / Acceso) | `192.168.101.101` |
+| **ESXi01** | `vmk1` | `vSwitch1` → **VMnet1** (Gestión / Almacenamiento) | `192.168.105.101` |
+| **ESXi02** | `vmk0` | `vSwitch0` → **VMnet8** (Producción / Acceso) | `192.168.101.102` |
+| **ESXi02** | `vmk1` | `vSwitch1` → **VMnet1** (Gestión / Almacenamiento) | `192.168.105.102` |
+| **TrueNAS** | `eth0` | **VMnet1** (iSCSI / NFS) | `192.168.105.105` |
+| **vCenter** | `eth0` | **VMnet1** / **VMnet8** | `192.168.105.103` |
 
 ## 👑 Fase 4: Control Centralizado (vCenter Server - VCSA)
 La pieza maestra que unifica la infraestructura corporativa.
